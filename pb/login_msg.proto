@@ -1,0 +1,11 @@
+syntax = "proto3";
+
+option go_package = "pb";
+option csharp_namespace = "Com.Baiyigame.Godnet.Login";
+option java_package = "com.baiyigame.pb";
+
+// 进入房间请求
+message LoginRequest {
+    string SessionToken = 1;        // 玩家登录Parse获得的SessionToken
+    string BundleIdentifier = 2;    // 客户端包标识符
+}

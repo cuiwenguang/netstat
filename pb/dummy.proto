@@ -1,0 +1,137 @@
+syntax = "proto3";
+
+import "cards.proto";
+
+option go_package = "pb";
+option csharp_namespace = "Com.Baiyigame.Godnet.Dummy";
+
+message DMM {
+
+    // 标记的扑克牌
+    message CardMark {
+        Card Card = 1;      
+        int32 Type = 2;                                 // 0:手牌 1:头牌 2:特殊牌
+        bool IsHead = 3;                                // 是否是头牌
+    }
+
+    // 玩家信息
+    message RoomPlayer {
+        int32 ID = 1;                                   // id
+        string UserName = 2;                            // 姓名
+        uint64 Chips = 3;                               // 筹码
+        string Avatar = 4;                              // 头像
+        int32 SeatId = 5;                               // 座位号(1~4) 
+        int32 LeftCardsCount = 6;                       // 剩余牌的数量
+        bool IsBanker = 7;                              // 是否是庄家
+        int32 Score = 8;                                // 玩家分数
+        repeated CardMark HandCards = 9;                    // 玩家的手牌（只有自己可见）
+        repeated CardGroupInfo CardGroupInfos = 10;      // 玩家自己组好的牌（其余玩家可见）
+    }
+
+    // 房间信息
+    message RoomInfo {
+        int32 RoomNum = 1;                              // 房间号
+        int32 State = 2;                                // 房间状态 （0:等待 1:开始）
+        int32 LeftCardsCount = 3;                       // 剩余牌的数量
+        repeated RoomPlayer Players = 4;               // 房间玩家
+        repeated CardMark DiscardCards = 5;
+        int32 ConfigID = 6;                             // 房间配置ID
+    }
+
+    // 倒计时消息
+    message TickMsg {
+        int32 Type = 1;                                 // 倒计时类型
+        int32 Total = 2;                                // 总时长
+        int32 Cur = 3;                                  // 当前倒计时
+    }
+
+    // 玩家游戏结束得分
+    message PlayerScore {
+        int32 ID = 1;                                   // 玩家id 
+        int32 Score = 2;                                // 玩家获得的分数
+        int32 WinOrLoseChips = 3;                       // 正数为赢取筹码，负数为失去筹码
+    }
+
+    // 游戏结束得分列表
+    message PlayerScores {
+        repeated PlayerScore GameScores = 1;
+    }
+
+    // 通知客户端增减分数
+    message ShowScores {
+        int32 PlayerID = 1;                             // 玩家ID
+        bool  ScoreChange = 2;                          // 判断加减分，True=加分，False=减分
+        int32 Multiple = 3;                             // 判断加减分倍数， 1, 2, 4倍可选
+    }
+
+    // 组牌信息请求信息
+    message BornInfo {
+        repeated CardMark HandCards = 1;                // 玩家手牌中需要组牌的牌
+        repeated CardMark DiscardCards = 2;             // 弃牌区中需要组的牌
+        int32 DiscardIndex = 3;                           // 弃牌区中玩家所选择的牌的索引 
+    }
+
+    // 玩家手里的牌组
+    message CardGroup {
+        CardMark CardMark = 1;                          // 玩家手牌中需要组牌的牌
+        int32 PlayerID = 2;                             // 组牌中牌属于哪个玩家 （其他玩家会连牌到玩家的牌组里面）
+    }
+
+    // 一组牌的信息
+    message CardGroupInfo {
+        repeated CardGroup CardGroups = 1;              // 玩家手牌中牌组
+        int32 Group = 2;                                // 玩家有多个组牌 属于第几组
+    }
+
+    // 连牌信息
+    message LeaveInfo {
+        int32 PlayerID = 1;                             // 连哪个玩家的组牌
+        int32 Group = 2;                                // 取玩家手牌中的第几组连牌
+        CardMark CardMark = 3;
+    }
+
+    // 出牌信息
+    message PutCardInfo {
+        int32 PlayerID = 1;                             // 玩家id
+        CardMark CardMark = 2;                          // 出的牌
+    }
+
+    // 扑克牌
+    message Cards {
+        repeated CardMark Cards = 1;
+    }
+
+    // 玩家倒计时通知
+    message PlayerTickNotify {
+        int32 PlayerID = 1;
+        TickMsg TickMsg = 2;
+    }
+
+    // 有玩家组牌通知
+    message BornNotify {
+        RoomPlayer RoomPlayer = 1;                      // 玩家
+        repeated CardMark DiscardCards = 2;             // 弃牌区中剩余的牌
+    }
+
+    // 玩家通知
+    message PlayerNotify {
+         int32 PlayerID = 1;                            // 玩家ID
+    }
+
+    // 连牌通知
+    message LeaveNotify {
+        int32 PlayerID = 1;                             
+        RoomPlayer RoomPlayer = 2;
+    }
+
+    // 超时
+    message OperationTimeout {
+
+    }
+
+    // 玩家分数变动
+    message PlayerScoreChange {
+        int32 PlayerID = 1;
+        int32 Score = 2;
+    }
+}

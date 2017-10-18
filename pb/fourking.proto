@@ -1,0 +1,97 @@
+syntax = "proto3";
+import "cards.proto";
+
+option go_package = "pb";
+option csharp_namespace = "Com.Baiyigame.Godnet.FourKing";
+
+message SK4 {
+
+    // 玩家信息
+    message RoomPlayer {
+        int32 ID = 1;                                   // id
+        string UserName = 2;                            // 姓名
+        string Avatar = 3;                              // 头像
+        uint64 Chips = 4;                               // 筹码
+        int32 SeatId = 5;                               // 座位号(1~4) 
+        int32 LeftCardsCount = 6;                       // 剩余牌的数量
+        int32 State = 7;                                // 玩家状态 (0:等待 1:游戏中)
+        bool IsBanker = 8;                              // 是否是庄家
+        repeated Card HandCards = 9;                    // 玩家手牌
+    }
+
+    // 房间信息
+    message RoomInfo {
+        int32 RoomNum = 1;                              // 房间号
+        int32 ConfigID = 2;                             // 房间配置ID
+        int32 State = 3;                                // 房间状态 （0:等待 1:游戏中）
+        int32 LeftCardsCount = 4;                       // 剩余牌的数量
+        repeated RoomPlayer Players = 5;                // 房间玩家
+    }
+
+    // 倒计时类型
+    enum TickType {
+        TickTypeDefault = 0;                            // 默认为游戏倒计时
+        Follow = 1;                                     // 跟牌
+        GetCard = 2;                                    // 摸牌
+        PutCard = 3;                                    // 出牌
+    }
+
+    // 倒计时消息
+    message TickMsg {
+        int32 Type = 1;                                 // 倒计时类型, （0：默认 1:跟牌  2:摸牌  3:出牌）
+        int32 Total = 2;                                // 总时长
+        int32 Cur = 3;                                  // 当前倒计时
+    }
+
+    // 牌局胜利失败类型
+    enum WinLoseType {
+        WinLoseTypeDefault = 0;
+        Win = 1;                                        // 赢
+        ShowWin = 2;                                    // 开牌赢
+        SpecialWin = 3;                                 // 特殊牌型赢
+        ShootWin  = 4;                                  // 放炮赢
+        SelfDrawnWin = 5;                               // 自摸赢
+        Lose = 6;                                       // 输
+        ShowLose = 7;                                   // 开牌输
+        ShootLose = 8;                                  // 放炮输
+    }
+
+    // 玩家得分信息
+    message PlayerScore {
+        int32 ID = 1;                                   // 玩家id 
+        repeated Card Cards = 2;                        // 玩家手牌
+        CardsType CardsType = 3;                        // 手牌类型
+        int32 CardsSum = 4;                             // 牌值总和
+        int64 WinOrLoseChips = 5;                       // 正数为赢取筹码，负数为失去筹码
+        WinLoseType Type = 6;                           // 牌局胜利失败类型
+    }
+
+    message PlayerScores {
+        repeated PlayerScore PlayerScores = 1;
+    }
+
+    // 玩家通知
+    message PlayerNotify {
+         int32 PlayerID = 1;                             // 玩家ID
+    }
+
+    // 跟牌信息
+    message FollowCardNotify {
+        int32 PlayerID = 1;                             // 玩家ID
+        int32 FollowedID = 2;                           // 被跟玩家ID
+        repeated Card Cards = 3;                        // 玩家出的牌
+        int64 Chips = 4;                                // 赢取/扣除筹码
+    }
+
+    // 玩家倒计时
+    message PlayerTickNotify {
+        int32 PlayerID = 1;                             // 玩家ID
+        TickMsg TickMsg = 2;                            // 倒计时
+    }
+
+    // 出牌信息
+    message PutCardNotify {
+         int32 PlayerID = 1;                             // 玩家ID
+         repeated Card Cards = 2;
+    }
+}

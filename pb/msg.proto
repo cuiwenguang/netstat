@@ -1,0 +1,24 @@
+syntax = "proto3";
+import "google/protobuf/any.proto";
+
+option go_package = "pb";
+option csharp_namespace = "Com.Baiyigame.Godnet.Comm";
+option java_package = "com.baiyigame.pb";
+
+// 回复消息的基类
+message Response {
+  sint32 Code = 1;               // 状态
+  string Msg = 2;                // 消息
+  google.protobuf.Any Data = 3;  // 对象
+}
+
+// 进入指定房间请求
+message EnterRoomReq {
+    int32 RoomNum = 1;              // 房间号
+    string Password = 2;            // 房间密码
+}
+
+// 快速进入房间请求
+message QuickEnterRoomReq {
+    int32 RoomCId = 1;              // 房间配置Id
+}

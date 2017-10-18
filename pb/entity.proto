@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+option go_package = "pb";
+option csharp_namespace = "Com.Baiyigame.Godnet.Comm";
+option java_package = "com.baiyigame.pb";
+
+// 玩家信息
+message Player {
+    int32 ID = 1;                     // id
+    uint64 Chips = 2;                 // 筹码
+    uint64 Diamond = 3;               // 钻石
+    string UserName = 4;              // 姓名
+    string SessionToken = 5;          // 玩家登录goweb获得的SessionToken
+}
+
+// 聊天消息
+message ChatMsg {
+    int32 From = 1;                                 // 那个玩家发出
+    int32 To = 2;                                   // 目标是哪个玩家
+    string Msg = 3;                                 // 消息内容
+}

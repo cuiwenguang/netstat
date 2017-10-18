@@ -1,0 +1,59 @@
+syntax = "proto3";
+
+option go_package = "pb";
+option csharp_namespace = "Com.Baiyigame.Godnet.Comm";
+option java_package = "com.baiyigame.pb";
+
+// 扑克牌值
+enum Face {
+    FaceDefault  = 0;
+    Two   = 2;                                     
+    Three = 3;  
+    Four  = 4; 
+    Five  = 5;  
+    Six   = 6; 
+    Seven = 7; 
+    Nine  = 9; 
+    Eight = 8; 
+    Ten   = 10; 
+    Jack  = 11; 
+    Queen = 12;
+    King  = 13;
+    Ace   = 14;
+}
+
+// 扑克牌花型
+enum Suit {
+    SuitDefault = 0;
+    Diamonds   = 1;                                 // 方块
+    Clubs = 2;                                      // 梅花
+    Hearts  = 3;                                    // 红桃
+    Spades  = 4;                                    // 黑桃
+}
+
+// 扑克牌
+message Card {
+    Face Face = 1;                                  // 面值
+    Suit Suit  = 2;                                 // 花色
+}
+
+// 牌组
+message Cards {
+    repeated Card Cards = 1;                        // 一组牌
+}
+
+// 扑克牌组合类型
+enum CardsType{
+    // 普通牌型
+    CardsTypeDefault = 0;
+    HighCard = 2;                                   // 高牌
+    Pair = 3;                                       // 对子     
+    TwoPair = 4;                                    // 两对
+    ThreeOfKind = 5;                                // 三条
+    Straight = 6;                                   // 顺子
+    Flush = 7;                                      // 同花
+    FullHouse = 8;                                  // 葫芦
+    FourOfKind = 9;                                 // 四条(金刚)
+    StraightFlush = 10;                             // 同花顺
+    RoyalFlush = 11;                                // 皇家同花顺
+}
